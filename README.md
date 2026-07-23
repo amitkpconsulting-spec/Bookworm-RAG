@@ -1,75 +1,157 @@
-Bookworm-RAG is a lightweight, privacy-focused, zero-leakage Retrieval-Augmented Generation (RAG) system. It supports 100% offline local LLMs (Ollama, LM Studio, LocalAI, vLLM) and local vector embeddings (TF-IDF, ChromaDB), as well as managed cloud endpoints like Google Gemini API.
-📋 System Prerequisites
-Before installing, ensure your environment meets the following requirements:
-Node.js: Version 18.x or 20.x or higher installed. (Download Node.js)
-Git: Installed on your operating system. (Download Git)
-Local Inference Engine (Optional for 100% offline use):
-Ollama (Recommended default: ollama run qwen2.5:7b or llama3.2)
-LM Studio (Local Server running on http://localhost:1234/v1)
-ChromaDB (Optional: for scalable local vector storage)
-Cloud API Key (Optional):
-Google Gemini API key if using cloud generation.
-🚀 Quick Start Installation
-Step 1: Clone the GitHub Repository
+# Bookworm RAG - Portable & Local-First Intelligence Engine 📚⚡
+
+**Bookworm RAG** is a powerful, portable Retrieval-Augmented Generation (RAG) web application that allows you to ingest documents, books, scanned files, and YouTube videos to build localized vector knowledge bases and query them using local or cloud AI models.
+
+Repository URL: [https://github.com/amitkpconsulting-spec/Bookworm-RAG](https://github.com/amitkpconsulting-spec/Bookworm-RAG)
+
+---
+
+## ✨ Features
+
+- **Multi-Format Batch Ingestion**:
+  - **Batch File Uploads**: Upload multiple PDFs, Word documents (`.docx`, `.doc`), Plain Text (`.txt`), HTML files, or Markdown simultaneously.
+  - **OCR Engine**: Extracts text from scanned document images (`.png`, `.jpg`, `.jpeg`, `.webp`) using built-in Tesseract OCR.
+  - **YouTube Transcripts**: Parse and chunk full transcripts directly from YouTube videos or channels.
+  - **Raw Text / Markdown Paste**: Ingest custom articles or notes on the fly.
+- **Hybrid Search & Vector Store**:
+  - Smart text chunking with configurable chunk size and overlap.
+  - Flexible embedding providers: Local TF-IDF sparse vector search or Google Gemini vector embeddings.
+- **LLM Flexibility**:
+  - Connect to local LLMs (e.g., **Ollama**, **LM Studio**, **LocalAI**) running on `localhost`.
+  - Seamless fallback or primary integration with **Google Gemini API**.
+- **Vector Hub & Database Management**:
+  - Inspect, filter, search, export, and import document chunks and vector indices.
+  - Persistent data storage for local knowledge retrieval.
+- **Modern UI**:
+  - Dark/Light responsive dashboard powered by React 19, Tailwind CSS v4, Lucide Icons, and Motion transitions.
+
+---
+
+## 🛠️ Prerequisites
+
+Before installing, ensure you have the following installed on your machine:
+
+- **Node.js**: v18.0.0 or higher (v20+ recommended)
+- **npm**: v9.0.0 or higher (comes with Node.js)
+- **Git**: Installed and configured on your system
+
+*Optional Services:*
+- **Google Gemini API Key**: Optional, if you wish to use Gemini models for embeddings or generation ([Get an API Key](https://aistudio.google.com/)).
+- **Local LLM Server (Ollama / LM Studio)**: Optional, if you prefer running models entirely offline on your GPU/CPU (e.g., `ollama run llama3`).
+
+---
+
+## 🚀 Quick Self-Installation Guide
+
+Follow these steps to clone, set up, and launch **Bookworm RAG** locally:
+
+### 1. Clone the Repository
+
 Open your terminal or command prompt and clone the repository:
-code
-Bash
+
+```bash
 git clone https://github.com/amitkpconsulting-spec/Bookworm-RAG.git
 cd Bookworm-RAG
-Step 2: Install Project Dependencies
-Install all necessary Node.js dependencies:
-code
-Bash
+```
+
+### 2. Install Dependencies
+
+Install all required node packages:
+
+```bash
 npm install
-Step 3: Configure Environment Variables
-Create a local environment configuration file:
-code
-Bash
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env` file from the provided `.env.example`:
+
+```bash
 cp .env.example .env
-Open the .env file in your preferred text editor and add any API keys if applicable (e.g., Gemini API key):
-code
-Env
-# Optional: Required only if using Google Gemini API provider
-GEMINI_API_KEY=your_gemini_api_key_here
+```
 
-# Optional: Default port configuration (Defaults to 3000)
-PORT=3000
-Step 4: Run the Development Server
-Start the full-stack server (Express backend + Vite frontend):
-code
-Bash
+Open `.env` in your text editor and add your configuration (e.g., your Gemini API Key if applicable):
+
+```env
+GEMINI_API_KEY="your_gemini_api_key_here"
+APP_URL="http://localhost:3000"
+```
+
+*Note: If you plan to use only local models (TF-IDF embeddings + Ollama), a Gemini API Key is optional.*
+
+### 4. Start the Local Development Server
+
+Run the application in development mode:
+
+```bash
 npm run dev
-Once running, access the web UI at:
-👉 http://localhost:3000
-🛠️ Production Build & Deployment
-To build and serve the application in a production environment:
-code
-Bash
-# 1. Build the production assets and bundle the server
-npm run build
+```
 
-# 2. Start the standalone production Node server
-npm start
-⚙️ Local LLM & Vector Backend Setup
-Once the UI is open at http://localhost:3000, navigate to Settings / Model Hub:
-1. Using Ollama (100% Offline)
-Start Ollama on your machine: ollama serve
-Run your preferred model: ollama run qwen2.5:7b
-In Model Hub:
-Set Provider to Ollama Local
-API URL: http://localhost:11434/v1
-Model Name: qwen2.5:7b (or llama3.2)
-2. Using LM Studio (100% Offline)
-Open LM Studio and load a GGUF model.
-Go to the Local Server tab and click Start Server.
-In Model Hub:
-Set Provider to LM Studio
-API URL: http://localhost:1234/v1
-3. Using Google Gemini API (Managed Cloud)
-Set Provider to Google Gemini API
-Enter your API Key in the field or configure GEMINI_API_KEY in .env.
-📂 Document Import & Vector Indexing
-Click on the Import Manager tab in the top navigation bar.
-Select or drag & drop multiple files (PDF, DOCX, DOC, HTML, TXT, or scanned Images).
-The system will automatically chunk, parse, and index your documents into the local vector database.
-Go to Intelligence Chat to start querying your local documents with grounded AI responses!
+The application server will boot on `http://localhost:3000`.
+
+### 5. Access the Web Application
+
+Open your browser and navigate to:
+```
+http://localhost:3000
+```
+
+---
+
+## 📦 Production Build & Deployment
+
+To compile the application for production deployment:
+
+### 1. Build the Production Assets & Server
+
+```bash
+npm run build
+```
+
+This compiles the client-side single-page app into `dist/` and bundles `server.ts` into a standalone CJS server script at `dist/server.cjs`.
+
+### 2. Run the Production Server
+
+```bash
+npm run start
+```
+
+The server will listen on port `3000` (or `PORT` environment variable if specified).
+
+---
+
+## 💡 Usage Guide
+
+1. **Upload Documents ("Import Manager" Tab)**:
+   - Drag & drop or select multiple PDF, Word, Image, or Text files to upload them in batch.
+   - Or paste a YouTube video URL / plain text snippet.
+2. **Configure Embeddings & LLM ("Local LLM & RAG Settings")**:
+   - Select your preferred embedding provider (**Local TF-IDF** or **Gemini Embeddings**).
+   - Set up your local LLM base URL (default: `http://localhost:11434` for Ollama) or Gemini API.
+3. **Chat & Retrieve**:
+   - Type queries in the main chat view to search your indexed documents and generate context-aware answers.
+
+---
+
+## 📁 Repository Structure
+
+```
+Bookworm-RAG/
+├── server.ts              # Express backend server (RAG engine, file ingestion, vector store)
+├── src/
+│   ├── App.tsx            # Primary React application interface
+│   ├── main.tsx           # Client entry point
+│   └── index.css          # Global styling & Tailwind directives
+├── package.json           # Dependencies and runtime scripts
+├── vite.config.ts         # Vite build configuration
+├── tsconfig.json          # TypeScript compiler options
+├── .env.example           # Example environment variable declaration
+└── README.md              # Installation & documentation guide
+```
+
+---
+
+## 🤝 Contributing & Support
+
+If you encounter issues, feel free to open an issue or pull request on the repository:
+[https://github.com/amitkpconsulting-spec/Bookworm-RAG](https://github.com/amitkpconsulting-spec/Bookworm-RAG)
