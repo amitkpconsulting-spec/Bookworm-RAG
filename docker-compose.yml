@@ -1,0 +1,26 @@
+services:
+  knowledge-io:
+    build: .
+    container_name: knowledge-io
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - NODE_ENV=production
+      # Inject your custom Gemini API Key if you want to use cloud capabilities locally
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    depends_on:
+      - chroma
+    restart: unless-stopped
+
+  chroma:
+    image: chromadb/chroma:latest
+    container_name: chroma-db
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data/chroma:/chroma/data
+    environment:
+      - CHROMA_SERVER_NO_TELEMETRY=1
+    restart: unless-stopped

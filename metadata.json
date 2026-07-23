@@ -1,0 +1,6 @@
+{
+  "name": "Technoscope",
+  "description": "your data your chat. An offline-portable RAG library that parses PDFs, extracts YouTube transcripts, performs local Tesseract OCR, and matches context locally.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
