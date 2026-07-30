@@ -10,7 +10,9 @@ import {
   Settings2, 
   Layers, 
   ShieldAlert,
-  HardDrive
+  HardDrive,
+  FileText,
+  Youtube
 } from "lucide-react";
 import { RAGSettings, SourceDocument } from "../types";
 
@@ -21,6 +23,10 @@ interface VectorHubProps {
   documents: SourceDocument[];
   totalChunks: number;
   isGenerating?: boolean;
+  onRefreshDocs?: () => Promise<void>;
+  onDeleteDoc?: (docId: string) => Promise<void>;
+  onClearAllDocs?: () => Promise<void>;
+  onNavigateToImport?: () => void;
 }
 
 export default function VectorHub({ 
@@ -29,7 +35,11 @@ export default function VectorHub({
   onShowSuccess,
   documents,
   totalChunks,
-  isGenerating = false
+  isGenerating = false,
+  onRefreshDocs,
+  onDeleteDoc,
+  onClearAllDocs,
+  onNavigateToImport
 }: VectorHubProps) {
   // Local temporary settings to support save button at bottom
   const [localSettings, setLocalSettings] = useState<RAGSettings>({ ...settings });
@@ -76,14 +86,14 @@ export default function VectorHub({
           <div className="flex items-center space-x-2.5">
             <h3 className="text-base font-extrabold text-white flex items-center">
               <Database className="h-5.5 w-5.5 text-indigo-400 mr-2.5" />
-              Vector Index & Storage Hub
+              Vector Hub & Source DB ({documents.length})
             </h3>
             <span className="text-[10px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
               Local Vector Sandbox
             </span>
           </div>
           <p className="text-xs text-[#525866] mt-1">
-            Configure indexers, select vector databases, choose similarity metrics, and allocate your local sandbox storage limits.
+            Unified Knowledge Base: Configure indexers, manage ingested source documents, select vector databases, and adjust local pen drive capacity.
           </p>
         </div>
       </div>
@@ -101,14 +111,14 @@ export default function VectorHub({
         </div>
       )}
 
-      {/* Grid: Stats & Limits */}
+      {/* Single Source Stats & Pen Drive Limits */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {/* Local Storage Card */}
+        {/* Pen Drive Storage Card */}
         <div className="bg-[#16181D]/60 border border-[#2A2D35] p-5 rounded-2xl flex flex-col justify-between shadow-md">
           <div>
             <p className="text-[11px] text-[#525866] font-bold uppercase tracking-widest mb-1 flex items-center">
               <HardDrive className="h-3 w-3 mr-1 text-indigo-400" />
-              Local Storage Sandbox
+              Pen Drive Storage Sandbox
             </p>
             <div className="flex justify-between items-baseline mt-2">
               <span className="text-lg font-mono font-extrabold text-white">{currentTotalGb} GB</span>
@@ -118,7 +128,7 @@ export default function VectorHub({
             {/* Capacity Selection Buttons */}
             <div className="mt-3 pt-3 border-t border-[#2A2D35]/30">
               <label className="text-[9px] text-[#525866] font-extrabold uppercase tracking-widest block mb-1.5">
-                Adjust Capacity Limit
+                Pen Drive Capacity (One-Time Configuration)
               </label>
               <div className="grid grid-cols-5 gap-1 bg-[#0B0C0E]/50 p-0.5 rounded-lg border border-[#2A2D35]/50">
                 {[64, 128, 256, 384, 512].map((cap) => (
@@ -194,6 +204,105 @@ export default function VectorHub({
             <span className="font-semibold text-emerald-400 font-mono">{(totalChars / 1024).toFixed(1)} KB Total</span>
           </div>
         </div>
+      </div>
+
+      {/* Ingested Document Source DB Entries */}
+      <div className="bg-[#16181D]/30 border border-[#2A2D35]/60 rounded-2xl p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+          <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center">
+            <FileText className="h-4.5 w-4.5 mr-2 text-indigo-400" />
+            Ingested Knowledge Base Entries ({documents.length})
+          </h4>
+          <div className="flex items-center space-x-2">
+            {onRefreshDocs && (
+              <button 
+                type="button"
+                onClick={onRefreshDocs}
+                className="flex items-center space-x-1.5 px-3 py-1.5 bg-[#16181D] hover:bg-[#1F2229] border border-[#2A2D35] rounded-lg text-xs font-medium text-[#E0E0E0] transition cursor-pointer"
+                title="Refresh DB"
+              >
+                <RefreshCw className="h-3.5 w-3.5" />
+                <span>Refresh DB</span>
+              </button>
+            )}
+            {onClearAllDocs && (documents.length > 0 || totalChunks > 0) && (
+              <button 
+                type="button"
+                onClick={onClearAllDocs}
+                className="flex items-center space-x-1.5 px-3 py-1.5 bg-rose-950/20 hover:bg-rose-950/40 border border-rose-950/40 rounded-lg text-xs font-bold text-rose-400 transition cursor-pointer"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                <span>WIPE DATABASE</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {documents.length === 0 ? (
+          <div className="flex flex-col items-center justify-center text-center p-10 text-[#525866] border border-dashed border-[#2A2D35] rounded-xl bg-[#0B0C0E]/20">
+            <FileText className="h-10 w-10 text-[#525866]/80 mb-3 stroke-[1.5]" />
+            <p className="text-sm font-semibold text-[#A0A0A0]">No knowledge ingested yet</p>
+            <p className="text-xs text-[#525866]/80 mt-1 max-w-sm">
+              Please upload your textbooks, books, PDFs, or YouTube channels in the "Import Manager" tab to start building your localized database.
+            </p>
+            {onNavigateToImport && (
+              <button
+                type="button"
+                onClick={onNavigateToImport}
+                className="mt-5 px-4 py-2 text-xs font-bold text-white bg-indigo-500 hover:bg-indigo-400 rounded-xl transition shadow-lg shadow-indigo-500/10 cursor-pointer"
+              >
+                Go to Import Manager
+              </button>
+            )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {documents.map(doc => (
+              <div 
+                key={doc.id}
+                className="group relative flex flex-col p-4 bg-[#16181D]/60 hover:bg-[#16181D] border border-[#2A2D35]/50 hover:border-[#2A2D35] rounded-xl transition duration-200"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex items-start space-x-3 overflow-hidden pr-8">
+                    <div className="p-2 bg-[#0B0C0E]/40 rounded-lg border border-[#2A2D35]/30">
+                      {doc.sourceType === "file" && <FileText className="h-5 w-5 text-indigo-400 shrink-0" />}
+                      {doc.sourceType === "youtube" && <Youtube className="h-5 w-5 text-rose-400 shrink-0" />}
+                      {doc.sourceType === "text" && <BookOpen className="h-5 w-5 text-emerald-400 shrink-0" />}
+                    </div>
+                    <div className="overflow-hidden">
+                      <p className="text-xs font-bold text-white truncate" title={doc.title}>
+                        {doc.title}
+                      </p>
+                      <div className="flex items-center space-x-2 mt-1">
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 font-extrabold uppercase tracking-wider">
+                          {doc.sourceType}
+                        </span>
+                        <span className="text-2xs text-[#525866] font-semibold font-mono">
+                          {doc.chunkCount} chunks
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {onDeleteDoc && (
+                    <button 
+                      type="button"
+                      onClick={() => onDeleteDoc(doc.id)}
+                      className="p-1.5 text-[#525866] hover:text-rose-400 hover:bg-[#1F2229] rounded-lg transition duration-150 cursor-pointer"
+                      title="Delete document"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
+                <div className="mt-4 pt-3 border-t border-[#2A2D35]/20 flex items-center justify-between text-3xs text-[#525866]">
+                  <span>Added: {new Date(doc.addedAt).toLocaleString()}</span>
+                  <span className="font-mono bg-[#0B0C0E]/40 px-1.5 py-0.5 rounded">{(doc.charCount / 1024).toFixed(1)} KB</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Vector Storage & Alignments Configuration Panel */}

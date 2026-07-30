@@ -40,7 +40,7 @@ export default function App() {
   const [settings, setSettings] = useState<RAGSettings | null>(null);
   
   // Tabs
-  const [activeTab, setActiveTab] = useState<"chat" | "add" | "model_hub" | "vector_hub" | "sources">("chat");
+  const [activeTab, setActiveTab] = useState<"chat" | "add" | "model_hub" | "vector_hub">("chat");
   
   // Chat state
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
@@ -481,13 +481,13 @@ export default function App() {
             <BookOpen className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h1 className="text-lg font-extrabold tracking-wider text-white flex items-center uppercase">
-              TECHNOSCOPE
+            <h1 className="text-lg font-extrabold tracking-wider text-white flex items-center">
+              Bookworm-RAG
               <span className="ml-2.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-0.5 text-3xs font-bold tracking-widest uppercase">
                 Portable Mode
               </span>
             </h1>
-            <p className="text-xs text-indigo-400 font-bold tracking-wide uppercase text-[10px]">your data your chat</p>
+            <p className="text-xs text-indigo-400 font-bold tracking-wide uppercase text-[10px]">by technoscope</p>
           </div>
         </div>
 
@@ -568,20 +568,8 @@ export default function App() {
                     : "text-[#525866] hover:bg-[#16181D] hover:text-[#E0E0E0]"
                 }`}
               >
-                <Layers className="h-4 w-4 text-indigo-400 animate-pulse" />
-                <span>Vector Hub</span>
-              </button>
-
-              <button
-                onClick={() => setActiveTab("sources")}
-                className={`flex items-center space-x-2 px-4 py-2.5 text-xs font-medium rounded-lg transition-colors ${
-                  activeTab === "sources"
-                    ? "bg-[#1F2229] text-white"
-                    : "text-[#525866] hover:bg-[#16181D] hover:text-[#E0E0E0]"
-                }`}
-              >
-                <Database className="h-4 w-4 text-indigo-400" />
-                <span>Source DB</span>
+                <Layers className="h-4 w-4 text-indigo-400" />
+                <span>Vector Hub & DB</span>
               </button>
             </div>
 
@@ -590,8 +578,7 @@ export default function App() {
               {activeTab === "chat" && "RAG matches context automatically"}
               {activeTab === "add" && "File is split & embedded instantly"}
               {activeTab === "model_hub" && "Configure LLMs & download weights"}
-              {activeTab === "vector_hub" && "Configure vector databases & similarity metrics"}
-              {activeTab === "sources" && "Manage ingested knowledge sources"}
+              {activeTab === "vector_hub" && "Configure vector databases, pen drive capacity & manage sources"}
             </div>
           </div>
 
@@ -1064,192 +1051,7 @@ export default function App() {
               />
             )}
 
-            {/* TAB 4: SOURCES DATABASE */}
-            {activeTab === "sources" && (
-              <div className="max-w-5xl mx-auto space-y-6">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-2">
-                  <div>
-                    <h3 className="text-base font-bold text-white flex items-center">
-                      <Database className="h-5 w-5 text-indigo-400 mr-2" />
-                      Ingested Sources Database ({documents.length})
-                    </h3>
-                    <p className="text-xs text-[#525866]">
-                      Monitor and manage all ingested textbooks, files, YouTube captions, and active database status.
-                    </p>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <button 
-                      onClick={fetchDocuments}
-                      className="flex items-center space-x-1.5 px-3 py-1.5 bg-[#16181D] hover:bg-[#1F2229] border border-[#2A2D35] rounded-lg text-xs font-medium text-[#E0E0E0] transition"
-                      title="Refresh lists"
-                    >
-                      <RefreshCw className="h-3.5 w-3.5" />
-                      <span>Refresh DB</span>
-                    </button>
-                    {(documents.length > 0 || totalChunks > 0) && (
-                      <button 
-                        onClick={clearAllDocuments}
-                        className="flex items-center space-x-1.5 px-3 py-1.5 bg-rose-950/20 hover:bg-rose-950/40 border border-rose-950/40 rounded-lg text-xs font-bold text-rose-400 transition"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                        <span>WIPE DATABASE</span>
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                {/* DB Stats Bento Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* Local Storage Card */}
-                  <div className="bg-[#16181D]/60 border border-[#2A2D35] p-5 rounded-2xl flex flex-col justify-between shadow-md">
-                    <div>
-                      <p className="text-[11px] text-[#525866] font-bold uppercase tracking-widest mb-1">Local Storage Sandbox</p>
-                      <div className="flex justify-between items-baseline mt-2">
-                        <span className="text-lg font-mono font-extrabold text-white">{currentTotalGb} GB</span>
-                        <span className="text-3xs text-[#525866] font-semibold">of {totalCapacityGb} GB limit</span>
-                      </div>
-
-                      {/* Capacity Selection Buttons */}
-                      <div className="mt-3 pt-3 border-t border-[#2A2D35]/30">
-                        <label className="text-[9px] text-[#525866] font-extrabold uppercase tracking-widest block mb-1.5">
-                          Adjust Capacity
-                        </label>
-                        <div className="grid grid-cols-5 gap-1 bg-[#0B0C0E]/50 p-0.5 rounded-lg border border-[#2A2D35]/50">
-                          {[64, 128, 256, 384, 512].map((cap) => (
-                            <button
-                              key={cap}
-                              onClick={() => handleSaveSettings({ sandboxCapacity: cap })}
-                              title={`${cap} GB Storage Sandbox`}
-                              className={`py-1 text-[10px] font-mono font-bold rounded transition-all ${
-                                totalCapacityGb === cap
-                                  ? "bg-indigo-600 text-white shadow-sm shadow-indigo-600/30"
-                                  : "text-[#525866] hover:text-[#E0E0E0] hover:bg-[#16181D]/40"
-                              }`}
-                            >
-                              {cap}G
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mt-4 space-y-2">
-                      <div className="h-2 w-full bg-[#0B0C0E] rounded-full">
-                        <div 
-                          className="h-full bg-indigo-500 rounded-full shadow-[0_0_8px_rgba(99,102,241,0.5)] transition-all duration-500"
-                          style={{ width: `${storagePct}%` }}
-                        ></div>
-                      </div>
-                      <div className="flex justify-between text-3xs text-[#525866] font-mono">
-                        <span>{storagePct}% capacity used</span>
-                        <span className="text-green-500 font-bold uppercase">Active sandbox</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Passages Card */}
-                  <div className="bg-[#16181D]/60 border border-[#2A2D35] p-5 rounded-2xl flex flex-col justify-between shadow-md">
-                    <div>
-                      <p className="text-[11px] text-[#525866] font-bold uppercase tracking-widest mb-1">Indexed Passages</p>
-                      <div className="flex justify-between items-baseline mt-2">
-                        <span className="text-2xl font-mono font-extrabold text-white">{totalChunks}</span>
-                        <span className="text-3xs text-indigo-400 font-bold uppercase">Ready for RAG</span>
-                      </div>
-                    </div>
-                    <div className="mt-4 pt-3 border-t border-[#2A2D35]/30 flex justify-between text-3xs text-[#525866]">
-                      <span>Indexed chunks of raw text</span>
-                      <span className="font-semibold text-indigo-400 font-mono">TF-IDF & Semantic</span>
-                    </div>
-                  </div>
-
-                  {/* Words Card */}
-                  <div className="bg-[#16181D]/60 border border-[#2A2D35] p-5 rounded-2xl flex flex-col justify-between shadow-md">
-                    <div>
-                      <p className="text-[11px] text-[#525866] font-bold uppercase tracking-widest mb-1">Total Words Indexed</p>
-                      <div className="flex justify-between items-baseline mt-2">
-                        <span className="text-2xl font-mono font-extrabold text-white">
-                          {documents.reduce((acc, curr) => acc + Math.round(curr.charCount / 5), 0).toLocaleString()}
-                        </span>
-                        <span className="text-3xs text-emerald-400 font-bold uppercase">Calculated</span>
-                      </div>
-                    </div>
-                    <div className="mt-4 pt-3 border-t border-[#2A2D35]/30 flex justify-between text-3xs text-[#525866]">
-                      <span>Average 5 characters per word</span>
-                      <span className="font-semibold text-emerald-400 font-mono">{(totalChars / 1024).toFixed(1)} KB Total</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Sources Document List/Grid */}
-                <div className="bg-[#16181D]/30 border border-[#2A2D35]/60 rounded-2xl p-6">
-                  <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 flex items-center">
-                    <FileText className="h-4.5 w-4.5 mr-2 text-indigo-400" />
-                    Ingested Document Entries ({documents.length})
-                  </h4>
-
-                  {documents.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center text-center p-12 text-[#525866] border border-dashed border-[#2A2D35] rounded-xl bg-[#0B0C0E]/20">
-                      <FileText className="h-10 w-10 text-[#525866]/80 mb-3 stroke-[1.5]" />
-                      <p className="text-sm font-semibold text-[#A0A0A0]">No knowledge ingested yet</p>
-                      <p className="text-xs text-[#525866]/80 mt-1 max-w-sm">
-                        Please upload your textbooks, books, PDFs, or YouTube channels in the "Import Manager" tab to start building your localized database.
-                      </p>
-                      <button
-                        onClick={() => setActiveTab("add")}
-                        className="mt-5 px-4 py-2 text-xs font-bold text-white bg-indigo-500 hover:bg-indigo-400 rounded-xl transition shadow-lg shadow-indigo-500/10 cursor-pointer"
-                      >
-                        Go to Import Manager
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {documents.map(doc => (
-                        <div 
-                          key={doc.id}
-                          className="group relative flex flex-col p-4 bg-[#16181D]/60 hover:bg-[#16181D] border border-[#2A2D35]/50 hover:border-[#2A2D35] rounded-xl transition duration-200"
-                        >
-                          <div className="flex items-start justify-between">
-                            <div className="flex items-start space-x-3 overflow-hidden pr-8">
-                              <div className="p-2 bg-[#0B0C0E]/40 rounded-lg border border-[#2A2D35]/30">
-                                {doc.sourceType === "file" && <FileText className="h-5 w-5 text-indigo-400 shrink-0" />}
-                                {doc.sourceType === "youtube" && <Youtube className="h-5 w-5 text-rose-400 shrink-0" />}
-                                {doc.sourceType === "text" && <BookOpen className="h-5 w-5 text-emerald-400 shrink-0" />}
-                              </div>
-                              <div className="overflow-hidden">
-                                <p className="text-xs font-bold text-white truncate" title={doc.title}>
-                                  {doc.title}
-                                </p>
-                                <div className="flex items-center space-x-2 mt-1">
-                                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 font-extrabold uppercase tracking-wider">
-                                    {doc.sourceType}
-                                  </span>
-                                  <span className="text-2xs text-[#525866] font-semibold font-mono">
-                                    {doc.chunkCount} chunks
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            
-                            <button 
-                              onClick={() => deleteDocument(doc.id)}
-                              className="p-1.5 text-[#525866] hover:text-rose-400 hover:bg-[#1F2229] rounded-lg transition duration-150"
-                              title="Delete document"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </div>
-                          <div className="mt-4 pt-3 border-t border-[#2A2D35]/20 flex items-center justify-between text-3xs text-[#525866]">
-                            <span>Added: {new Date(doc.addedAt).toLocaleString()}</span>
-                            <span className="font-mono bg-[#0B0C0E]/40 px-1.5 py-0.5 rounded">{(doc.charCount / 1024).toFixed(1)} KB</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* TAB 5: VECTOR STORAGE & EMBEDDINGS HUB */}
+            {/* TAB 4: UNIFIED VECTOR HUB & SOURCE DB */}
             {activeTab === "vector_hub" && settings && (
               <VectorHub 
                 settings={settings} 
@@ -1261,6 +1063,10 @@ export default function App() {
                 documents={documents}
                 totalChunks={totalChunks}
                 isGenerating={isGenerating}
+                onRefreshDocs={fetchDocuments}
+                onDeleteDoc={deleteDocument}
+                onClearAllDocs={clearAllDocuments}
+                onNavigateToImport={() => setActiveTab("add")}
               />
             )}
           </div>
