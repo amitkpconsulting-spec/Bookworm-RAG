@@ -156,25 +156,41 @@ Bookworm-RAG/
 If you encounter issues, feel free to open an issue or pull request on the repository:
 [https://github.com/amitkpconsulting-spec/Bookworm-RAG](https://github.com/amitkpconsulting-spec/Bookworm-RAG)
 
-MIT License
+📄 License
 
-Copyright (c) 2026 Technoscope.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Technoscope (Amit Kumar Pandey) Proprietary Source-Available License
+Copyright (c) 2026 Technoscope (Amit Kumar Pandey). All Rights Reserved.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+```
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+
+This software and associated documentation files (the "Software") are the proprietary property of Technoscope (Amit Kumar Pandey).
+
+By downloading, accessing, or using the Software, you agree to the following terms:
+
+1. Grant of Limited License
+You are granted a limited, non-exclusive, non-transferable right to download, install, and evaluate the Software for internal, non-commercial testing purposes only.
+
+2. Absolute Ownership
+The Software is licensed, not sold. Technoscope (Amit Kumar Pandey) retains all intellectual property rights, title, and interest in and to the Software. You may not claim ownership of the Software, its source code, or any derivative works under any circumstances.
+
+3. Restrictions on Use
+Without prior explicit, written permission from the copyright holder, you MAY NOT:
+
+Use the Software for commercial purposes, including in production environments.
+
+Modify, alter, or create derivative works of the Software.
+
+Distribute, sub-license, host, or sell the Software to any third party.
+
+Remove or alter any copyright notices or proprietary markings.
+
+4. Consultancy, Advisory, and Commercial Use
+Any production deployment, commercial usage, or requirement for technical support, implementation advisory, and compliance consultancy must be obtained directly from Technoscope (Amit Kumar Pandey).
+
+To request commercial licensing, advisory services, or permission for restricted uses, please contact: [amitkp.consulting@gmail.com / www.technoscope.com]
+
+5. Limitation of Liability
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
